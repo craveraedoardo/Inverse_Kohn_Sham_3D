@@ -63,21 +63,33 @@ The test systems are drops of $A = 2, 4, 8$ **neutrons** in a harmonic trap, in 
 
 ## Installation
 
-Python ≥ 3.10 is recommended.
+Python ≥ 3.10 is recommended. On recent Debian/Ubuntu (and other distributions following PEP 668) `pip install` into the system Python is blocked with `externally-managed-environment`, so use a virtual environment.
+
+`cyipopt` needs the IPOPT library, which must be installed **before** `pip install` (Debian/Ubuntu):
 
 ```bash
-git clone <repository-url>
-cd Kohn-Sham-inversion-3D
+sudo apt install python3-venv coinor-libipopt-dev liblapack-dev libblas-dev pkg-config
+```
+
+Then:
+
+```bash
+git clone https://github.com/craveraedoardo/Inverse_Kohn_Sham_3D.git
+cd Inverse_Kohn_Sham_3D/Inverse_Kohn_Sham_3D_Cravera
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-`cyipopt` needs the IPOPT library. The simplest route is conda:
+Alternatively, with conda (no system packages needed):
 
 ```bash
-conda install -c conda-forge cyipopt
+conda create -n iks -c conda-forge python=3.12 numpy scipy matplotlib numexpr cyipopt
+conda activate iks
+pip install findiff
 ```
 
-With pip on Linux, install IPOPT and the BLAS/LAPACK development files first (Debian/Ubuntu: `sudo apt install coinor-libipopt-dev liblapack-dev libblas-dev pkg-config`), then `pip install cyipopt`. On a cluster, load the IPOPT module provided by the system. See the [IPOPT](https://coin-or.github.io/Ipopt/) and [cyipopt](https://cyipopt.readthedocs.io/) documentation.
+On a cluster, load the IPOPT module provided by the system. See the [IPOPT](https://coin-or.github.io/Ipopt/) and [cyipopt](https://cyipopt.readthedocs.io/) documentation.
 
 The code was last run with numpy 2.5, scipy 1.18, matplotlib 3.11, numexpr 2.14, findiff 0.16, cyipopt 1.7 and IPOPT 3.11.
 
@@ -99,7 +111,7 @@ V RMSE (|x|<3b): 6.234e-04 MeV
 
 and the figure `test_3D_data_2part/IKS_2particles_validation.pdf`.
 
-Every script is run from the repository root; it writes its figures into a folder `test_3D_data_*/` (or `*_out/`) and the solver writes `ipopt.out` in the current directory. All these outputs are ignored by git.
+Every script is run from the `Inverse_Kohn_Sham_3D_Cravera/` folder; it writes its figures into a folder `test_3D_data_*/` (or `*_out/`) and the solver writes `ipopt.out` in the current directory. All these outputs are ignored by git.
 
 > **Note.** The run-time messages and the labels of the figures are in Italian; comments and docstrings are in English.
 
@@ -108,7 +120,7 @@ Every script is run from the repository root; it writes its figures into a folde
 ## Repository structure
 
 ```
-Kohn-Sham-inversion-3D/
+Inverse_Kohn_Sham_3D_Cravera/
 ├── src/                                   core library
 │   ├── consts3D.py                        constants, hbar^2/2m, oscillator lengths and frequencies vs A
 │   ├── deformed.py                        axially deformed oscillator at constant volume
